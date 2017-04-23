@@ -1,0 +1,263 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package View;
+
+import Controller.penjualanDAO;
+import Model.Detailpenjualan;
+import Model.Kategorimotor;
+import Model.Penjualan;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+
+/**
+ *
+ * @author ANDRE
+ */
+public class penjualan extends javax.swing.JPanel implements ListSelectionListener {
+
+    /**
+     * Creates new form penjualan
+     */
+    private penjualanDAO daoPenjualan;
+
+    private DefaultTableModel dtmPenjualan;
+    private DefaultTableModel dtmDetail;
+    private List<Penjualan> listPenj;
+    private List<Detailpenjualan> listDetail;
+
+    int rowPenjualan;
+    int rowDetail;
+
+    public penjualan() {
+        initComponents();
+        daoPenjualan = new penjualanDAO();
+        dtmPenjualan = (DefaultTableModel) tablePenjualan.getModel();
+        dtmDetail = (DefaultTableModel) tableDetail.getModel();
+        showAllDataPenjualan();
+    }
+
+    /*
+    ---------
+    Start of methods 
+     */
+    //Untuk menampilkan seluruh data penjualan
+    private void showAllDataPenjualan() {
+        tablePenjualan.getSelectionModel().removeListSelectionListener(this);
+        listPenj = daoPenjualan.getAllPenjualan();
+        dtmPenjualan.getDataVector().removeAllElements();
+
+        for (Penjualan s : listPenj) {
+            listDetail = daoPenjualan.getDetailPenjualan(s.getIDOrder());
+            int total = 0;
+            for (int i = 0; i < listDetail.size(); i++) {
+                total += listDetail.get(i).getSubtotal();
+            }
+
+            dtmPenjualan.addRow(new Object[]{
+                s.getIDOrder(),
+                s.getIDKaryawan() + " - " + s.getIDKaryawan().getNamaDepan() + " " + s.getIDKaryawan().getNamaBelakang(),
+                s.getIDCustomer() + " - " + s.getIDCustomer().getNamaDepan() + " " + s.getIDCustomer().getNamaBelakang(),
+                s.getMetodePembayaran(),
+                s.getTanggalPembayaran(),
+                s.getLunas(),
+                total
+            });
+        }
+        tablePenjualan.getSelectionModel().addListSelectionListener(this);
+    }
+
+    //Untuk menampilkan data produk yang ada dalam penjualan
+    private void showAllPenjualanData() {
+
+        tableDetail.getSelectionModel().removeListSelectionListener(this);
+        listDetail = daoPenjualan.getDetailPenjualan(listPenj.get(rowPenjualan).getIDOrder());
+        dtmDetail.getDataVector().removeAllElements();
+
+        for (Detailpenjualan od : listDetail) {
+            if (od.getIDOrderDetails() >= 1) {
+                dtmDetail.addRow(new Object[]{
+                    od.getIDOrderDetails(),
+                    od.getIDProduk() + " - " + od.getIDProduk().getNamaBarang(),
+                    od.getHarga(),
+                    od.getJumlah(),
+                    od.getPotonganHarga(),
+                    od.getSubtotal()
+                });
+            }
+        }
+
+        tableDetail.getSelectionModel().addListSelectionListener(this);
+
+    }
+
+    //Untuk menghapus data
+    private void deleteData() {
+
+        //Untuk hapus penjualan
+        try {
+            Penjualan s = new Penjualan();
+            s.setIDOrder(listPenj.get(rowPenjualan).getIDOrder());
+            s.setIDKaryawan(listPenj.get(rowPenjualan).getIDKaryawan());
+            s.setIDCustomer(listPenj.get(rowPenjualan).getIDCustomer());
+            s.setMetodePembayaran(listPenj.get(rowPenjualan).getMetodePembayaran());
+            s.setTanggalPembayaran(listPenj.get(rowPenjualan).getTanggalPembayaran());
+            s.setLunas(listPenj.get(rowPenjualan).getLunas());
+
+            listDetail = daoPenjualan.getDetailPenjualan(listPenj.get(rowPenjualan).getIDOrder());
+            for (Detailpenjualan od : listDetail) {
+                daoPenjualan.deleteDetailPenjualan(od);
+            }
+
+            daoPenjualan.deletePenjualan(s);
+            JOptionPane.showMessageDialog(this, "Data berhasil dihapus!");
+            showAllDataPenjualan();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Data gagal dihapus!");
+        }
+
+    }
+
+    /*
+    ---------
+    End of methods 
+     */
+    @Override
+    public void valueChanged(ListSelectionEvent e) {
+        if (e.getSource() == tablePenjualan.getSelectionModel()) {
+            rowPenjualan = tablePenjualan.getSelectedRow();
+            rowDetail = 0;
+        } else if (e.getSource() == tableDetail.getSelectionModel()) {
+            rowDetail = tableDetail.getSelectedRow();
+            rowPenjualan = 0;
+        }
+        showAllPenjualanData();
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tablePenjualan = new javax.swing.JTable();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        tableDetail = new javax.swing.JTable();
+        btnHapus = new javax.swing.JButton();
+        jButton12 = new javax.swing.JButton();
+
+        setBackground(new java.awt.Color(255, 51, 51));
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        tablePenjualan.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID Order", "ID Karyawan", "ID Customer", "Metode Pembayaran", "Tanggal Pemesanan", "Lunas?", "Total"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane4.setViewportView(tablePenjualan);
+
+        add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 60, 688, 236));
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(240, 240, 240));
+        jLabel7.setText("Data Penjualan");
+        add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 20, -1, -1));
+
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/icon_bawah.png"))); // NOI18N
+        add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 320, -1, -1));
+
+        tableDetail.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID Order Details", "ID Produk", "Harga", "Jumlah", "Potongan Harga", "Sub Total"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane5.setViewportView(tableDetail);
+
+        add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 410, 688, 119));
+
+        btnHapus.setText("Hapus");
+        btnHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHapusActionPerformed(evt);
+            }
+        });
+        add(btnHapus, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 300, 80, 40));
+
+        jButton12.setText("Back");
+        jButton12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton12ActionPerformed(evt);
+            }
+        });
+        add(jButton12, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 540, -1, -1));
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+        deleteData();
+    }//GEN-LAST:event_btnHapusActionPerformed
+
+    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
+        Home h = new Home();
+        this.setVisible(false);
+    }//GEN-LAST:event_jButton12ActionPerformed
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnHapus;
+    private javax.swing.JButton jButton12;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JTable tableDetail;
+    private javax.swing.JTable tablePenjualan;
+    // End of variables declaration//GEN-END:variables
+
+}
