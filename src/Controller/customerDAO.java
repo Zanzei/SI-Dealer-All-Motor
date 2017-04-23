@@ -29,7 +29,7 @@ public class customerDAO {
     public List<Customer> getAllCustomers() {
         Session sess = bukaSession();
 
-        List<Customer> temp = sess.createQuery("SELECT p FROM customer p").list();
+        List<Customer> temp = sess.createQuery("SELECT p FROM Customer p").list();
         sess.close();
         return temp;
     }
@@ -42,7 +42,7 @@ public class customerDAO {
     public List<Customer> getCustomerById(int param) {
         Session sess = bukaSession();
 
-        List<Customer> temp = sess.createQuery("SELECT p FROM customer p WHERE p.IDCustomer = "+param).list();
+        List<Customer> temp = sess.createQuery("SELECT p FROM Customer p WHERE p.iDCustomer = "+param).list();
         sess.close();
         return temp;
     }

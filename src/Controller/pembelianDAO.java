@@ -62,7 +62,8 @@ public class pembelianDAO {
         List<Detailpembelian> temp = sess.createQuery("SELECT p FROM Pembelian p WHERE p.iDSupplier = "+param).list();
         sess.close();
         return temp;
-    }
+    } 
+    
     public boolean addOrUpdatePembelian(Pembelian param) {
         try {
             Session sess = bukaSession();

@@ -72,6 +72,14 @@ public class penjualanDAO {
         return temp;
     }
     
+    public List<Penjualan> getPenjualanByCustomer(int param) {
+        Session sess = bukaSession();
+
+        List<Penjualan> temp = sess.createQuery("SELECT p FROM Penjualan p WHERE p.iDCustomer = "+param).list();
+        sess.close();
+        return temp;
+    }
+    
     public boolean addOrUpdatePenjualan(Penjualan param) {
         try {
             Session sess = bukaSession();

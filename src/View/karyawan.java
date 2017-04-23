@@ -197,7 +197,7 @@ public class karyawan extends javax.swing.JPanel implements ListSelectionListene
                     + " dan dengan nama lengkap " + pilihan.getNamaDepan() + " " + pilihan.getNamaBelakang()
                     + " adalah : ");
             panelDetail.setVisible(true);
-            JOptionPane.showConfirmDialog(this, panelDetail, null, JOptionPane.OK_OPTION);
+            JOptionPane.showMessageDialog(this, panelDetail, null, JOptionPane.OK_OPTION);
         } else {
             JOptionPane.showMessageDialog(this, "Tidak ada karyawan yang dipilih!");
         }
