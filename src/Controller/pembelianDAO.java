@@ -56,10 +56,10 @@ public class pembelianDAO {
         return temp;
     }
     
-    public List<Detailpembelian> getDetailPembelianBySupplier(int param) {
+    public List<Pembelian> getPembelianBySupplier(int param) {
         Session sess = bukaSession();
 
-        List<Detailpembelian> temp = sess.createQuery("SELECT p FROM Pembelian p WHERE p.iDSupplier = "+param).list();
+        List<Pembelian> temp = sess.createQuery("SELECT p FROM Pembelian p WHERE p.iDSupplier = "+param).list();
         sess.close();
         return temp;
     } 

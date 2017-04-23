@@ -42,7 +42,7 @@ public class supplierDAO {
     public List<Supplier> getSupplierById(int param) {
         Session sess = bukaSession();
 
-        List<Supplier> temp = sess.createQuery("SELECT p FROM Supplier p WHERE p.IDSupplier = "+param).list();
+        List<Supplier> temp = sess.createQuery("SELECT p FROM Supplier p WHERE p.iDSupplier = "+param).list();
         sess.close();
         return temp;
     }

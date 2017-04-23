@@ -93,7 +93,7 @@ public class Home extends javax.swing.JFrame {
         Home.setBackground(new java.awt.Color(255, 0, 51));
 
         jPanel3.setBackground(new java.awt.Color(255, 0, 51));
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Data Motor", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(240, 240, 240))); // NOI18N
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Data Motor", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(240, 240, 240)));
 
         btnStok.setBackground(new java.awt.Color(0, 153, 153));
         btnStok.setForeground(new java.awt.Color(0, 0, 255));
@@ -138,7 +138,7 @@ public class Home extends javax.swing.JFrame {
         );
 
         jPanel4.setBackground(new java.awt.Color(255, 0, 51));
-        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Data Transaksi", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(240, 240, 240))); // NOI18N
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Data Transaksi", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(240, 240, 240)));
         jPanel4.setForeground(new java.awt.Color(240, 240, 240));
 
         btnPenj.setBackground(new java.awt.Color(0, 153, 153));
@@ -196,7 +196,7 @@ public class Home extends javax.swing.JFrame {
         );
 
         jPanel5.setBackground(new java.awt.Color(255, 0, 51));
-        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Data Kontak", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(240, 240, 240))); // NOI18N
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Data Kontak", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(240, 240, 240)));
 
         btnKaryawan.setBackground(new java.awt.Color(0, 153, 153));
         btnKaryawan.setForeground(new java.awt.Color(0, 0, 255));
@@ -260,7 +260,7 @@ public class Home extends javax.swing.JFrame {
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/logo.png"))); // NOI18N
 
         jPanel15.setBackground(new java.awt.Color(255, 0, 51));
-        jPanel15.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Penambahan Transaksi", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(240, 240, 240))); // NOI18N
+        jPanel15.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Penambahan Transaksi", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(240, 240, 240)));
 
         btnTambahRet.setBackground(new java.awt.Color(0, 153, 153));
         btnTambahRet.setForeground(new java.awt.Color(0, 0, 255));
@@ -278,6 +278,11 @@ public class Home extends javax.swing.JFrame {
         btnTambahPemb.setBackground(new java.awt.Color(0, 153, 153));
         btnTambahPemb.setForeground(new java.awt.Color(0, 0, 255));
         btnTambahPemb.setText("Tambah Pembelian");
+        btnTambahPemb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTambahPembActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
         jPanel15.setLayout(jPanel15Layout);
@@ -694,6 +699,10 @@ public class Home extends javax.swing.JFrame {
         Login l = new Login();
         l.setVisible(true);
     }//GEN-LAST:event_btnLogoutActionPerformed
+
+    private void btnTambahPembActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahPembActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnTambahPembActionPerformed
     
     
     /**
