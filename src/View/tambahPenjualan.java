@@ -145,7 +145,7 @@ public class tambahPenjualan extends javax.swing.JPanel {
                 }
 
                 p.setMetodePembayaran(metode);
-
+                //System.out.println("");
                 daoPenjualan.addOrUpdatePenjualan(p);
                 for (Detailpenjualan od : listDetail) {
                     od.setIDOrder(p);
