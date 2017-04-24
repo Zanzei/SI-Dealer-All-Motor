@@ -71,11 +71,6 @@ public class tambahPembelian extends javax.swing.JPanel {
     ---------
     Start of methods 
      */
-    //Untuk menghapus data
-    private void deleteData() {
-
-    }
-
     //Untuk memasukkan data ke tableCart
     private void add() {
         try {
@@ -131,8 +126,15 @@ public class tambahPembelian extends javax.swing.JPanel {
                 for (Detailpembelian od : listDetail) {
                     od.setIDOrder(p);
                     daoPembelian.addOrUpdateDetailPembelian(od);
+                    
+                    //Update data stok produk (bertambah)
+                    Stokdigudang s = daoStok.getStokById(od.getIDProduk().getIDBarang()).get(0);
+                    
+                    s.setStok(s.getStok() + od.getJumlah());
+                    daoStok.addOrUpdateStok(s);                  
                 }
                 JOptionPane.showMessageDialog(this, "Data berhasil disimpan!");
+                refresh();
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Data gagal disimpan!");
@@ -144,6 +146,7 @@ public class tambahPembelian extends javax.swing.JPanel {
         dtmCart.getDataVector().removeAllElements();
         tableCart.repaint();
         listDetail.removeAll(listDetail);
+        noUrut = 1;
     }
 
     /*
