@@ -678,7 +678,7 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_repBestProdActionPerformed
 
     private void repBestKaryawanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repBestKaryawanActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_repBestKaryawanActionPerformed
     /*
     ---------
@@ -701,7 +701,10 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLogoutActionPerformed
 
     private void btnTambahPembActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahPembActionPerformed
-        // TODO add your handling code here:
+       tPemb = new tambahPembelian();
+        this.add(tPemb);
+        Home.setVisible(false);
+        tPemb.setVisible(true);
     }//GEN-LAST:event_btnTambahPembActionPerformed
     
     

@@ -6,6 +6,23 @@
 package View;
 
 import Controller.pembelianDAO;
+import Controller.stokDAO;
+import Controller.supplierDAO;
+import Model.Detailpembelian;
+import Model.Pembelian;
+import Model.Stokdigudang;
+import Model.Supplier;
+import com.mchange.v2.cmdline.ParsedCommandLine;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.List;
+import javax.swing.AbstractButton;
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -18,20 +35,42 @@ public class tambahPembelian extends javax.swing.JPanel {
      * Creates new form tambahPembelian
      */
     private pembelianDAO daoPembelian;
-    private DefaultTableModel dtm;
+    private stokDAO daoStok;
+    private supplierDAO daoSupplier;
+
+    private DefaultTableModel dtmCart;
+    private List<Detailpembelian> listDetail;
+    private List<Supplier> listSupplier;
+    private List<Stokdigudang> listStok;
+
+    private DefaultComboBoxModel dcbmSupplier;
+    private DefaultComboBoxModel dcbmProduk;
+
+    private int noUrut;
+    SpinnerModel sm;
 
     public tambahPembelian() {
         initComponents();
         daoPembelian = new pembelianDAO();
-        dtm = new DefaultTableModel();
+        daoStok = new stokDAO();
+        daoSupplier = new supplierDAO();
 
+        dtmCart = (DefaultTableModel) tableCart.getModel();
+        dcbmSupplier = new DefaultComboBoxModel();
+        dcbmProduk = new DefaultComboBoxModel();
+
+        listDetail = new ArrayList<>();
+        listSupplier = daoSupplier.getAllSupplier();
+        listStok = daoStok.getStokNotEmpty();
+
+        noUrut = 1;
+        addToComboBox();
     }
 
     /*
     ---------
     Start of methods 
      */
-
     //Untuk menghapus data
     private void deleteData() {
 
@@ -39,22 +78,107 @@ public class tambahPembelian extends javax.swing.JPanel {
 
     //Untuk memasukkan data ke tableCart
     private void add() {
+        try {
+            rbMetode = new ButtonGroup();
+            rbMetode.add(rbKredit);
+            rbMetode.add(rbDebit);
+            rbMetode.add(rbTunai);
 
+            String potongan = tfPotongan.getText();
+            Integer.parseInt(potongan);
+            tfSubTotal.setText(String.valueOf((Long.parseLong(tfHarga.getText()) * Long.parseLong(spJumlah.getValue().toString())) - Integer.parseInt(tfPotongan.getText())));
+
+            //Add to table
+            dtmCart.addRow(new Object[]{
+                noUrut,
+                cbProduk.getSelectedItem(),
+                tfHarga.getText(),
+                spJumlah.getValue(),
+                potongan,
+                tfSubTotal.getText()
+            });
+
+            //Add to list for use in addToDb
+            String selectedItem = trimId(cbProduk.getSelectedItem().toString());
+
+            Detailpembelian dp = new Detailpembelian();
+            dp.setIDProduk(daoStok.getStokById(Integer.parseInt(selectedItem)).get(0));
+            dp.setHarga(daoStok.getStokById(Integer.parseInt(selectedItem)).get(0).getHarga());
+            dp.setJumlah(Integer.parseInt(spJumlah.getValue().toString()));
+            dp.setPotonganHarga(Integer.parseInt(potongan));
+            listDetail.add(dp);
+            noUrut++;
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Gagal add order!");
+        }
     }
-    
+
     //Untuk memasukkan data dari tableCart ke database
-    private void addToDb(){
-        
+    private void addToDb() {
+        try {
+            if (dtmCart.getRowCount() == 0) {
+                JOptionPane.showMessageDialog(this, "Order tidak dapat dibuat sebab tidak ada produk yang dibeli!");
+            } else {
+                String metode = getSelectedButtonText(rbMetode);
+                Pembelian p = new Pembelian();
+                Date d = new Date();
+                p.setIDSupplier(daoSupplier.getSupplierById(Integer.parseInt(trimId(cbSupplier.getSelectedItem().toString()))).get(0));
+                p.setMetodePembayaran(metode);
+                p.setTanggalPembelian(d);
+
+                daoPembelian.addOrUpdatePembelian(p);
+                for (Detailpembelian od : listDetail) {
+                    od.setIDOrder(p);
+                    daoPembelian.addOrUpdateDetailPembelian(od);
+                }
+                JOptionPane.showMessageDialog(this, "Data berhasil disimpan!");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Data gagal disimpan!");
+        }
     }
-    
+
     //Untuk mereset isi dari tableCart
-    private void refresh(){
-        
+    private void refresh() {
+        dtmCart.getDataVector().removeAllElements();
+        tableCart.repaint();
+        listDetail.removeAll(listDetail);
     }
+
     /*
     ---------
     End of methods 
      */
+    private void addToComboBox() {
+        for (Supplier k : listSupplier) {
+            dcbmSupplier.addElement(k);
+        }
+
+        for (Stokdigudang k : listStok) {
+            dcbmProduk.addElement(k.getIDBarang() + " - " + k.getNamaBarang());
+        }
+        cbSupplier.setModel(dcbmSupplier);
+        cbProduk.setModel(dcbmProduk);
+    }
+
+    private String trimId(String selectedItem) {
+        selectedItem = selectedItem.substring(0, selectedItem.indexOf("-"));
+        selectedItem = selectedItem.trim();
+        return selectedItem;
+    }
+
+    public String getSelectedButtonText(ButtonGroup buttonGroup) {
+        for (Enumeration<AbstractButton> buttons = buttonGroup.getElements(); buttons.hasMoreElements();) {
+            AbstractButton button = buttons.nextElement();
+
+            if (button.isSelected()) {
+                return button.getText();
+            }
+        }
+
+        return null;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -65,25 +189,26 @@ public class tambahPembelian extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        rbMetode = new javax.swing.ButtonGroup();
         jLabel34 = new javax.swing.JLabel();
         jPanel16 = new javax.swing.JPanel();
         jLabel35 = new javax.swing.JLabel();
-        jComboBox4 = new javax.swing.JComboBox<>();
+        cbSupplier = new javax.swing.JComboBox<>();
         jLabel36 = new javax.swing.JLabel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jRadioButton3 = new javax.swing.JRadioButton();
+        rbKredit = new javax.swing.JRadioButton();
+        rbDebit = new javax.swing.JRadioButton();
+        rbTunai = new javax.swing.JRadioButton();
         jPanel17 = new javax.swing.JPanel();
         jLabel37 = new javax.swing.JLabel();
         jLabel38 = new javax.swing.JLabel();
         jLabel41 = new javax.swing.JLabel();
         jLabel44 = new javax.swing.JLabel();
         jLabel49 = new javax.swing.JLabel();
-        jComboBox5 = new javax.swing.JComboBox<>();
-        jTextField13 = new javax.swing.JTextField();
-        jSpinner1 = new javax.swing.JSpinner();
-        jTextField14 = new javax.swing.JTextField();
-        jTextField20 = new javax.swing.JTextField();
+        cbProduk = new javax.swing.JComboBox<>();
+        tfHarga = new javax.swing.JTextField();
+        spJumlah = new javax.swing.JSpinner();
+        tfPotongan = new javax.swing.JTextField();
+        tfSubTotal = new javax.swing.JTextField();
         btnAdd = new javax.swing.JButton();
         jScrollPane17 = new javax.swing.JScrollPane();
         tableCart = new javax.swing.JTable();
@@ -104,23 +229,26 @@ public class tambahPembelian extends javax.swing.JPanel {
         jLabel35.setForeground(new java.awt.Color(240, 240, 240));
         jLabel35.setText("Supplier :");
 
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Pilih Supplier --" }));
+        cbSupplier.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Pilih Supplier --" }));
 
         jLabel36.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel36.setForeground(new java.awt.Color(240, 240, 240));
         jLabel36.setText("Metode Pembayaran :");
 
-        jRadioButton1.setBackground(new java.awt.Color(255, 51, 51));
-        jRadioButton1.setForeground(new java.awt.Color(240, 240, 240));
-        jRadioButton1.setText("Kredit");
+        rbKredit.setBackground(new java.awt.Color(255, 51, 51));
+        rbMetode.add(rbKredit);
+        rbKredit.setForeground(new java.awt.Color(240, 240, 240));
+        rbKredit.setText("KREDIT");
 
-        jRadioButton2.setBackground(new java.awt.Color(255, 51, 51));
-        jRadioButton2.setForeground(new java.awt.Color(240, 240, 240));
-        jRadioButton2.setText("Debit");
+        rbDebit.setBackground(new java.awt.Color(255, 51, 51));
+        rbMetode.add(rbDebit);
+        rbDebit.setForeground(new java.awt.Color(240, 240, 240));
+        rbDebit.setText("DEBIT");
 
-        jRadioButton3.setBackground(new java.awt.Color(255, 51, 51));
-        jRadioButton3.setForeground(new java.awt.Color(240, 240, 240));
-        jRadioButton3.setText("Tunai");
+        rbTunai.setBackground(new java.awt.Color(255, 51, 51));
+        rbMetode.add(rbTunai);
+        rbTunai.setForeground(new java.awt.Color(240, 240, 240));
+        rbTunai.setText("TUNAI");
 
         javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
         jPanel16.setLayout(jPanel16Layout);
@@ -133,13 +261,13 @@ public class tambahPembelian extends javax.swing.JPanel {
                     .addComponent(jLabel35))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jComboBox4, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cbSupplier, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel16Layout.createSequentialGroup()
-                        .addComponent(jRadioButton1)
+                        .addComponent(rbKredit)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
-                        .addComponent(jRadioButton2)
+                        .addComponent(rbDebit)
                         .addGap(18, 18, 18)
-                        .addComponent(jRadioButton3)))
+                        .addComponent(rbTunai)))
                 .addContainerGap())
         );
         jPanel16Layout.setVerticalGroup(
@@ -148,13 +276,13 @@ public class tambahPembelian extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel35)
-                    .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel36)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2)
-                    .addComponent(jRadioButton3))
+                    .addComponent(rbKredit)
+                    .addComponent(rbDebit)
+                    .addComponent(rbTunai))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
 
@@ -181,11 +309,52 @@ public class tambahPembelian extends javax.swing.JPanel {
         jLabel49.setForeground(new java.awt.Color(240, 240, 240));
         jLabel49.setText("Sub Total :");
 
-        jComboBox5.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Pilih Produk --" }));
+        cbProduk.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Pilih Produk --" }));
+        cbProduk.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbProdukItemStateChanged(evt);
+            }
+        });
 
-        jTextField13.setEnabled(false);
+        tfHarga.setEnabled(false);
+
+        spJumlah.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
+        spJumlah.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                spJumlahStateChanged(evt);
+            }
+        });
+
+        tfPotongan.setText("0");
+        tfPotongan.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                tfPotonganMouseExited(evt);
+            }
+        });
+        tfPotongan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfPotonganActionPerformed(evt);
+            }
+        });
+        tfPotongan.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tfPotonganFocusLost(evt);
+            }
+        });
+        tfPotongan.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfPotonganKeyTyped(evt);
+            }
+        });
+
+        tfSubTotal.setEnabled(false);
 
         btnAdd.setText("Add");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel17Layout = new javax.swing.GroupLayout(jPanel17);
         jPanel17.setLayout(jPanel17Layout);
@@ -197,23 +366,23 @@ public class tambahPembelian extends javax.swing.JPanel {
                     .addGroup(jPanel17Layout.createSequentialGroup()
                         .addComponent(jLabel37)
                         .addGap(18, 18, 18)
-                        .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(cbProduk, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel17Layout.createSequentialGroup()
                         .addComponent(jLabel38)
                         .addGap(18, 18, 18)
-                        .addComponent(jTextField13))
+                        .addComponent(tfHarga))
                     .addGroup(jPanel17Layout.createSequentialGroup()
                         .addComponent(jLabel41)
                         .addGap(18, 18, 18)
-                        .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(spJumlah, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel17Layout.createSequentialGroup()
                         .addComponent(jLabel44)
                         .addGap(18, 18, 18)
-                        .addComponent(jTextField14))
+                        .addComponent(tfPotongan))
                     .addGroup(jPanel17Layout.createSequentialGroup()
                         .addComponent(jLabel49)
                         .addGap(18, 18, 18)
-                        .addComponent(jTextField20)))
+                        .addComponent(tfSubTotal)))
                 .addContainerGap(36, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel17Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -228,22 +397,22 @@ public class tambahPembelian extends javax.swing.JPanel {
                     .addGroup(jPanel17Layout.createSequentialGroup()
                         .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel37)
-                            .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cbProduk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel38)
-                            .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(tfHarga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel41)
-                            .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(spJumlah, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addComponent(jLabel44))
-                    .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tfPotongan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel49)
-                    .addComponent(jTextField20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tfSubTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnAdd)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -254,7 +423,7 @@ public class tambahPembelian extends javax.swing.JPanel {
 
             },
             new String [] {
-                "No Urut", "ID Produk", "Harga", "Jumlah", "Potongan Harga", "Sub Total"
+                "No Urut", "Produk", "Harga", "Jumlah", "Potongan Harga", "Sub Total"
             }
         ) {
             Class[] types = new Class [] {
@@ -275,10 +444,25 @@ public class tambahPembelian extends javax.swing.JPanel {
         jScrollPane17.setViewportView(tableCart);
 
         btnConfirm.setText("Konfirmasi Penambahan");
+        btnConfirm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConfirmActionPerformed(evt);
+            }
+        });
 
         btnClear.setText("Clear Order");
+        btnClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearActionPerformed(evt);
+            }
+        });
 
         btnBack.setText("Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -333,14 +517,60 @@ public class tambahPembelian extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        Home h = new Home();
+        this.setVisible(false);
+    }//GEN-LAST:event_btnBackActionPerformed
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        add();
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void cbProdukItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbProdukItemStateChanged
+        String selectedItem = trimId(cbProduk.getSelectedItem().toString());
+
+        spJumlah.setValue(1);
+        tfHarga.setText(String.valueOf(daoStok.getStokById(Integer.parseInt(selectedItem)).get(0).getHarga()));
+        tfSubTotal.setText(String.valueOf(Long.parseLong(tfHarga.getText()) * Long.parseLong(spJumlah.getValue().toString())));
+    }//GEN-LAST:event_cbProdukItemStateChanged
+
+    private void spJumlahStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spJumlahStateChanged
+        // TODO add your handling code here:
+        tfSubTotal.setText(String.valueOf(Long.parseLong(tfHarga.getText()) * Long.parseLong(spJumlah.getValue().toString())));
+    }//GEN-LAST:event_spJumlahStateChanged
+
+    private void tfPotonganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfPotonganActionPerformed
+
+    }//GEN-LAST:event_tfPotonganActionPerformed
+
+    private void tfPotonganKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfPotonganKeyTyped
+
+    }//GEN-LAST:event_tfPotonganKeyTyped
+
+    private void tfPotonganMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tfPotonganMouseExited
+
+    }//GEN-LAST:event_tfPotonganMouseExited
+
+    private void tfPotonganFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfPotonganFocusLost
+
+    }//GEN-LAST:event_tfPotonganFocusLost
+
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+        refresh();
+    }//GEN-LAST:event_btnClearActionPerformed
+
+    private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
+        addToDb();
+    }//GEN-LAST:event_btnConfirmActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnConfirm;
-    private javax.swing.JComboBox<String> jComboBox4;
-    private javax.swing.JComboBox<String> jComboBox5;
+    private javax.swing.JComboBox<String> cbProduk;
+    private javax.swing.JComboBox<String> cbSupplier;
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel36;
@@ -351,14 +581,15 @@ public class tambahPembelian extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel49;
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel17;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
     private javax.swing.JScrollPane jScrollPane17;
-    private javax.swing.JSpinner jSpinner1;
-    private javax.swing.JTextField jTextField13;
-    private javax.swing.JTextField jTextField14;
-    private javax.swing.JTextField jTextField20;
+    private javax.swing.JRadioButton rbDebit;
+    private javax.swing.JRadioButton rbKredit;
+    private javax.swing.ButtonGroup rbMetode;
+    private javax.swing.JRadioButton rbTunai;
+    private javax.swing.JSpinner spJumlah;
     private javax.swing.JTable tableCart;
+    private javax.swing.JTextField tfHarga;
+    private javax.swing.JTextField tfPotongan;
+    private javax.swing.JTextField tfSubTotal;
     // End of variables declaration//GEN-END:variables
 }

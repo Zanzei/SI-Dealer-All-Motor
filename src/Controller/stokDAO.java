@@ -44,7 +44,7 @@ public class stokDAO {
     public List<Stokdigudang> getStokById(int param) {
         Session sess = bukaSession();
 
-        List<Stokdigudang> temp = sess.createQuery("SELECT p FROM Stokdigudang p WHERE p.IDBarang = "+param).list();
+        List<Stokdigudang> temp = sess.createQuery("SELECT p FROM Stokdigudang p WHERE p.iDBarang = "+param).list();
         sess.close();
         return temp;
     }
@@ -57,6 +57,13 @@ public class stokDAO {
         return temp;
     }
     
+    public List<Stokdigudang> getStokNotEmpty() {
+        Session sess = bukaSession();
+
+        List<Stokdigudang> temp = sess.createQuery("SELECT p FROM Stokdigudang p WHERE p.stok <> 0").list();
+        sess.close();
+        return temp;
+    }
     public boolean addOrUpdateStok(Stokdigudang param) {
         try {
             Session sess = bukaSession();

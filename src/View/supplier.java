@@ -186,7 +186,7 @@ public class supplier extends javax.swing.JPanel implements ListSelectionListene
     private void initComponents() {
 
         jLabel39 = new javax.swing.JLabel();
-        jButton21 = new javax.swing.JButton();
+        btnBack = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jLabel40 = new javax.swing.JLabel();
         tfID = new javax.swing.JTextField();
@@ -223,13 +223,13 @@ public class supplier extends javax.swing.JPanel implements ListSelectionListene
         jLabel39.setText("Supplier");
         add(jLabel39, new org.netbeans.lib.awtextra.AbsoluteConstraints(444, 11, -1, -1));
 
-        jButton21.setText("Back");
-        jButton21.addActionListener(new java.awt.event.ActionListener() {
+        btnBack.setText("Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton21ActionPerformed(evt);
+                btnBackActionPerformed(evt);
             }
         });
-        add(jButton21, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 638, -1, -1));
+        add(btnBack, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 638, -1, -1));
 
         jPanel6.setBackground(new java.awt.Color(255, 51, 51));
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Add / Update Data Supplier", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(240, 240, 240)));
@@ -485,10 +485,10 @@ public class supplier extends javax.swing.JPanel implements ListSelectionListene
         addOrUpdate();
     }//GEN-LAST:event_btnSimpanActionPerformed
 
-    private void jButton21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton21ActionPerformed
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         Home h = new Home();
         this.setVisible(false);
-    }//GEN-LAST:event_jButton21ActionPerformed
+    }//GEN-LAST:event_btnBackActionPerformed
 
     private void btnDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetailActionPerformed
         showDetailPembelian();
@@ -500,11 +500,11 @@ public class supplier extends javax.swing.JPanel implements ListSelectionListene
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBack;
     private javax.swing.JButton btnDetail;
     private javax.swing.JButton btnHapus;
     private javax.swing.JButton btnSimpan;
     private com.toedter.calendar.JDateChooser dateChooser;
-    private javax.swing.JButton jButton21;
     private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel42;
