@@ -26,7 +26,7 @@ public class Home extends javax.swing.JFrame {
     tambahPembelian tPemb;
     tambahPenjualan tPenj;
     tambahRetur tRet;
-    
+
     public Home() {
         initComponents();
         Home.setVisible(true);
@@ -274,6 +274,11 @@ public class Home extends javax.swing.JFrame {
         btnTambahPenj.setBackground(new java.awt.Color(0, 153, 153));
         btnTambahPenj.setForeground(new java.awt.Color(0, 0, 255));
         btnTambahPenj.setText("Tambah Penjualan");
+        btnTambahPenj.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTambahPenjActionPerformed(evt);
+            }
+        });
 
         btnTambahPemb.setBackground(new java.awt.Color(0, 153, 153));
         btnTambahPemb.setForeground(new java.awt.Color(0, 0, 255));
@@ -537,8 +542,8 @@ public class Home extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
-    
+
+
     private void repPenjualanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repPenjualanActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_repPenjualanActionPerformed
@@ -590,8 +595,8 @@ public class Home extends javax.swing.JFrame {
         Home.setVisible(false);
         con.setVisible(true);
     }//GEN-LAST:event_btnContactActionPerformed
-    
-    
+
+
     private void btnTambahRetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahRetActionPerformed
         // TODO add your handling code here:
         tRet = new tambahRetur();
@@ -632,7 +637,7 @@ public class Home extends javax.swing.JFrame {
     ---------
     Start of JasperReport code
     ---------
-    */
+     */
     private void repSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repSupplierActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_repSupplierActionPerformed
@@ -678,14 +683,14 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_repBestProdActionPerformed
 
     private void repBestKaryawanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repBestKaryawanActionPerformed
-        
+
     }//GEN-LAST:event_repBestKaryawanActionPerformed
     /*
     ---------
     End of JasperReport code
     ---------
-    */
-    
+     */
+
     private void btnHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHelpActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnHelpActionPerformed
@@ -701,13 +706,19 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLogoutActionPerformed
 
     private void btnTambahPembActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahPembActionPerformed
-       tPemb = new tambahPembelian();
+        tPemb = new tambahPembelian();
         this.add(tPemb);
         Home.setVisible(false);
         tPemb.setVisible(true);
     }//GEN-LAST:event_btnTambahPembActionPerformed
-    
-    
+
+    private void btnTambahPenjActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahPenjActionPerformed
+        tPenj = new tambahPenjualan();
+        this.add(tPenj);
+        Home.setVisible(false);
+        tPenj.setVisible(true);
+    }//GEN-LAST:event_btnTambahPenjActionPerformed
+
     /**
      * @param args the command line arguments
      */
