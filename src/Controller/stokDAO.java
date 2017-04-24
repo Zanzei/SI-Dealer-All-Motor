@@ -60,7 +60,7 @@ public class stokDAO {
     public List<Stokdigudang> getStokNotEmpty() {
         Session sess = bukaSession();
 
-        List<Stokdigudang> temp = sess.createQuery("SELECT p FROM Stokdigudang p WHERE p.stok <> 0").list();
+        List<Stokdigudang> temp = sess.createQuery("SELECT p FROM Stokdigudang p WHERE p.stok <> "+0).list();
         sess.close();
         return temp;
     }

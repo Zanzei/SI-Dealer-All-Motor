@@ -140,7 +140,6 @@ public class tambahPenjualan extends javax.swing.JPanel {
                     labelPenjelasan.setText("Tanggal Penjualan");
                     panelDetail.setVisible(true);
                     JOptionPane.showMessageDialog(this, panelDetail, null, JOptionPane.OK_OPTION);
-                    
                     p.setTanggalPembayaran(lunasChooser.getDate());
                 }
 
@@ -155,11 +154,6 @@ public class tambahPenjualan extends javax.swing.JPanel {
                     Stokdigudang s = daoStok.getStokById(od.getIDProduk().getIDBarang()).get(0);
 
                     s.setStok(s.getStok() - od.getJumlah());
-                    if (s.getStok() >= 0) {
-                        daoStok.addOrUpdateStok(s);
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Stok tidak mencukupi!");
-                    }
                 }
                 JOptionPane.showMessageDialog(this, "Data berhasil disimpan!");
                 refresh();
@@ -181,6 +175,15 @@ public class tambahPenjualan extends javax.swing.JPanel {
     ---------
     End of methods 
      */
+
+    private void gantiSpinner(Stokdigudang p) {
+        int batas = p.getStok();
+
+        sm = new SpinnerNumberModel(1, 1, batas, 1);
+        spJumlah.setModel(sm);
+    }
+
+
     private void addToComboBox() {
         for (Customer k : listCustomer) {
             dcbmCustomer.addElement(k.getIDCustomer() + " - " + k.getNamaDepan() + " " + k.getNamaBelakang());
@@ -389,6 +392,7 @@ public class tambahPenjualan extends javax.swing.JPanel {
 
         tfPotongan.setText("0");
 
+
         tfSubTotal.setEnabled(false);
 
         btnAdd.setText("Add");
@@ -550,6 +554,8 @@ public class tambahPenjualan extends javax.swing.JPanel {
 
     private void cbProdukItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbProdukItemStateChanged
         String selectedItem = trimId(cbProduk.getSelectedItem().toString());
+
+        gantiSpinner(daoStok.getStokById(Integer.parseInt(selectedItem)).get(0));
 
         spJumlah.setValue(1);
         tfHarga.setText(String.valueOf(daoStok.getStokById(Integer.parseInt(selectedItem)).get(0).getHarga()));
