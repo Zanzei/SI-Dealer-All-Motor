@@ -140,7 +140,6 @@ public class tambahPenjualan extends javax.swing.JPanel {
                     labelPenjelasan.setText("Tanggal Penjualan");
                     panelDetail.setVisible(true);
                     JOptionPane.showMessageDialog(this, panelDetail, null, JOptionPane.OK_OPTION);
-
                     p.setTanggalPembayaran(lunasChooser.getDate());
                 }
 
@@ -176,12 +175,14 @@ public class tambahPenjualan extends javax.swing.JPanel {
     ---------
     End of methods 
      */
+
     private void gantiSpinner(Stokdigudang p) {
         int batas = p.getStok();
 
         sm = new SpinnerNumberModel(1, 1, batas, 1);
         spJumlah.setModel(sm);
     }
+
 
     private void addToComboBox() {
         for (Customer k : listCustomer) {
@@ -391,6 +392,7 @@ public class tambahPenjualan extends javax.swing.JPanel {
 
         tfPotongan.setText("0");
 
+
         tfSubTotal.setEnabled(false);
 
         btnAdd.setText("Add");
@@ -552,8 +554,9 @@ public class tambahPenjualan extends javax.swing.JPanel {
 
     private void cbProdukItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbProdukItemStateChanged
         String selectedItem = trimId(cbProduk.getSelectedItem().toString());
+
         gantiSpinner(daoStok.getStokById(Integer.parseInt(selectedItem)).get(0));
-        
+
         spJumlah.setValue(1);
         tfHarga.setText(String.valueOf(daoStok.getStokById(Integer.parseInt(selectedItem)).get(0).getHarga()));
         tfSubTotal.setText(String.valueOf(Long.parseLong(tfHarga.getText()) * Long.parseLong(spJumlah.getValue().toString())));
