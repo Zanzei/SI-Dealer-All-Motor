@@ -64,6 +64,15 @@ public class stokDAO {
         sess.close();
         return temp;
     }
+    
+    public List<Stokdigudang> getStokByDetailPenjualan(int param) {
+        Session sess = bukaSession();
+
+        List<Stokdigudang> temp = sess.createQuery("SELECT p FROM Stokdigudang p WHERE p.iDOrder = "+param).list();
+        sess.close();
+        return temp;
+    }
+    
     public boolean addOrUpdateStok(Stokdigudang param) {
         try {
             Session sess = bukaSession();

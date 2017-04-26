@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <NonVisualComponents>
+    <Component class="javax.swing.ButtonGroup" name="rbDisetujui">
+    </Component>
+  </NonVisualComponents>
   <Properties>
     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
       <Color blue="0" green="0" red="ff" type="rgb"/>
@@ -43,8 +47,8 @@
                               <Component id="jScrollPane22" min="-2" pref="688" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jButton54" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="jButton53" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="btnTambah" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="btnClear" alignment="0" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                           <Component id="jButton52" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -73,9 +77,9 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jScrollPane22" alignment="0" min="-2" pref="119" max="-2" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
-                      <Component id="jButton54" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnTambah" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="jButton53" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnClear" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -108,12 +112,12 @@
                   <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                   <Component id="jLabel59" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="jTextField27" min="-2" pref="217" max="-2" attributes="0"/>
+                  <Component id="tfID" min="-2" pref="217" max="-2" attributes="0"/>
                   <EmptySpace pref="33" max="32767" attributes="0"/>
               </Group>
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="32767" attributes="0"/>
-                  <Component id="jButton55" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnConfirm" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -124,10 +128,10 @@
                   <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel59" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jTextField27" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="tfID" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="jButton55" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnConfirm" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -145,12 +149,15 @@
             <Property name="text" type="java.lang.String" value="Order ID :"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="jTextField27">
+        <Component class="javax.swing.JTextField" name="tfID">
         </Component>
-        <Component class="javax.swing.JButton" name="jButton55">
+        <Component class="javax.swing.JButton" name="btnConfirm">
           <Properties>
             <Property name="text" type="java.lang.String" value="Konfirmasi ID"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnConfirmActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -179,24 +186,24 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel66" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="jRadioButton8" min="-2" max="-2" attributes="0"/>
+                                  <Component id="rbYa" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="59" max="-2" attributes="0"/>
-                                  <Component id="jRadioButton7" min="-2" max="-2" attributes="0"/>
+                                  <Component id="rbTidak" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Group type="103" alignment="0" groupAlignment="1" attributes="0">
                                   <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
                                           <Component id="jLabel62" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                                          <Component id="jComboBox11" min="-2" pref="143" max="-2" attributes="0"/>
+                                          <Component id="cbProduk" min="-2" pref="143" max="-2" attributes="0"/>
                                       </Group>
                                       <Group type="102" alignment="0" attributes="0">
                                           <Component id="jLabel63" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                                          <Component id="jTextField24" max="32767" attributes="0"/>
+                                          <Component id="tfHarga" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <Component id="jButton51" alignment="1" min="-2" pref="73" max="-2" attributes="0"/>
+                                  <Component id="btnAdd" alignment="1" min="-2" pref="73" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
@@ -214,15 +221,17 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel62" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jComboBox11" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jLabel62" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Component id="cbProduk" min="-2" pref="20" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel63" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jTextField24" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="tfHarga" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
@@ -238,11 +247,11 @@
                   </Group>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel66" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jRadioButton7" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jRadioButton8" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="rbTidak" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="rbYa" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jButton51" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnAdd" min="-2" max="-2" attributes="0"/>
                   <EmptySpace pref="16" max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -293,32 +302,43 @@
             <Property name="text" type="java.lang.String" value="Disetujui?"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JComboBox" name="jComboBox11">
+        <Component class="javax.swing.JComboBox" name="cbProduk">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="1">
-                <StringItem index="0" value="-- Pilih Produk --"/>
+                <StringItem index="0" value="-- Masukkan ID dahulu --"/>
               </StringArray>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="cbProdukMouseExited"/>
+            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="cbProdukItemStateChanged"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbProdukActionPerformed"/>
+          </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
         </Component>
-        <Component class="javax.swing.JTextField" name="jTextField24">
+        <Component class="javax.swing.JTextField" name="tfHarga">
           <Properties>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton51">
+        <Component class="javax.swing.JButton" name="btnAdd">
           <Properties>
             <Property name="text" type="java.lang.String" value="Add"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddActionPerformed"/>
+          </Events>
         </Component>
-        <Component class="javax.swing.JRadioButton" name="jRadioButton7">
+        <Component class="javax.swing.JRadioButton" name="rbTidak">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="33" green="33" red="ff" type="rgb"/>
+            </Property>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="rbDisetujui"/>
             </Property>
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="f0" green="f0" red="f0" type="rgb"/>
@@ -326,10 +346,13 @@
             <Property name="text" type="java.lang.String" value="Tidak"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JRadioButton" name="jRadioButton8">
+        <Component class="javax.swing.JRadioButton" name="rbYa">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="33" green="33" red="ff" type="rgb"/>
+            </Property>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="rbDisetujui"/>
             </Property>
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="f0" green="f0" red="f0" type="rgb"/>
@@ -344,7 +367,7 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JTextArea" name="jTextArea6">
+            <Component class="javax.swing.JTextArea" name="taKeterangan">
               <Properties>
                 <Property name="columns" type="int" value="20"/>
                 <Property name="lineWrap" type="boolean" value="true"/>
@@ -370,6 +393,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Back"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton52ActionPerformed"/>
+      </Events>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane22">
       <AuxValues>
@@ -378,7 +404,7 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JTable" name="jTable15">
+        <Component class="javax.swing.JTable" name="tableCart">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
               <Table columnCount="5" rowCount="0">
@@ -393,15 +419,21 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JButton" name="jButton53">
+    <Component class="javax.swing.JButton" name="btnClear">
       <Properties>
         <Property name="text" type="java.lang.String" value="Clear"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnClearActionPerformed"/>
+      </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton54">
+    <Component class="javax.swing.JButton" name="btnTambah">
       <Properties>
         <Property name="text" type="java.lang.String" value="Konfirmasi Penambahan"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTambahActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
