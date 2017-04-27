@@ -5,6 +5,20 @@
  */
 package View;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.HashMap;
+import javax.swing.JOptionPane;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.view.JasperViewer;
+
 /**
  *
  * @author Master
@@ -638,8 +652,50 @@ public class Home extends javax.swing.JFrame {
     Start of JasperReport code
     ---------
      */
+    private Connection getConnection() {
+        Connection con = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            String url = "jdbc:mysql://localhost/dealermotor";
+            String user = "root";
+            String pw = "";
+            con = DriverManager.getConnection(url, user, pw);
+        } catch (ClassNotFoundException e) {
+            System.out.println(e.toString());
+        } catch (SQLException sql) {
+            System.out.println(sql.toString());
+        }
+        return con;
+    }
+
+    private void compileProcessReport(String path, String file) {
+
+        try {
+            JasperReport jRpt = JasperCompileManager.compileReport(path);
+            JasperPrint jPrint = JasperFillManager.fillReport(jRpt,
+                    new HashMap(), getConnection());
+
+            int pilih = JOptionPane.showConfirmDialog(this, "Lihat report?");
+
+            if (pilih == JOptionPane.OK_OPTION) {
+                JasperViewer.viewReport(jPrint, false);
+            }
+
+            pilih = JOptionPane.showConfirmDialog(this, "Simpan sebagai pdf?");
+
+            if (pilih == JOptionPane.OK_OPTION) {
+                JasperExportManager.exportReportToPdfFile(jPrint, file);
+            }
+
+        } catch (JRException ex) {
+            System.out.println(ex.toString());
+        }
+    }
     private void repSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repSupplierActionPerformed
-        // TODO add your handling code here:
+        Date d = new Date();
+        String file = "C:\\report\\" + "SupplierData" + d
+                + ".pdf";
+        compileProcessReport("I:\\PBOL\\Tugas Besar\\TugasBesarOOPL\\report\\Data Supplier.jrxml", file);
     }//GEN-LAST:event_repSupplierActionPerformed
 
     private void repCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repCustomerActionPerformed
