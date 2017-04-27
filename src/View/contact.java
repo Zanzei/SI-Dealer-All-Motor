@@ -6,6 +6,10 @@
 package View;
 
 import Controller.feedbackDAO;
+import Controller.karyawanDAO;
+import Model.Feedback;
+import Model.Karyawan;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -16,25 +20,40 @@ public class contact extends javax.swing.JPanel {
     /**
      * Creates new form contact
      */
-    
     private feedbackDAO daoFeedback;
+    private karyawanDAO daoKaryawan;
+    boolean isValid;
     public contact() {
         initComponents();
         daoFeedback = new feedbackDAO();
+        daoKaryawan = new karyawanDAO();
     }
+
     /*
     ---------
     Start of methods 
-    */
+     */
     //Untuk memasukkan data
-    private void addData(){
-        
+    private void addData() {
+        try {
+            if (taKeterangan.getText().equals("") || isValid == false) {
+                throw new Exception();
+            }
+            Feedback k = new Feedback();
+            k.setIDKaryawan(daoKaryawan.getKaryawanById(Integer.parseInt(tfID.getText())).get(0));
+            k.setKeterangan(taKeterangan.getText());
+
+            daoFeedback.addFeedback(k);
+            JOptionPane.showMessageDialog(this, "Data berhasil disimpan!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Data gagal disimpan!");
+        }
     }
+
     /*
     ---------
     End of methods 
-    */
-    
+     */
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -49,10 +68,10 @@ public class contact extends javax.swing.JPanel {
         jLabel24 = new javax.swing.JLabel();
         jLabel27 = new javax.swing.JLabel();
         jLabel33 = new javax.swing.JLabel();
-        jTextField11 = new javax.swing.JTextField();
-        jTextField12 = new javax.swing.JTextField();
+        tfID = new javax.swing.JTextField();
+        tfNama = new javax.swing.JTextField();
         jScrollPane16 = new javax.swing.JScrollPane();
-        jTextArea5 = new javax.swing.JTextArea();
+        taKeterangan = new javax.swing.JTextArea();
         btnSimpan = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
 
@@ -79,9 +98,17 @@ public class contact extends javax.swing.JPanel {
         jLabel33.setForeground(new java.awt.Color(240, 240, 240));
         jLabel33.setText("Keterangan :");
 
-        jTextArea5.setColumns(20);
-        jTextArea5.setRows(5);
-        jScrollPane16.setViewportView(jTextArea5);
+        tfID.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                tfIDMouseExited(evt);
+            }
+        });
+
+        tfNama.setEnabled(false);
+
+        taKeterangan.setColumns(20);
+        taKeterangan.setRows(5);
+        jScrollPane16.setViewportView(taKeterangan);
 
         btnSimpan.setText("Simpan");
         btnSimpan.addActionListener(new java.awt.event.ActionListener() {
@@ -107,8 +134,8 @@ public class contact extends javax.swing.JPanel {
                             .addComponent(jLabel24))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(tfNama, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tfID, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -121,11 +148,11 @@ public class contact extends javax.swing.JPanel {
                 .addGap(4, 4, 4)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel27)
-                    .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tfID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel24)
-                    .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tfNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel33)
@@ -147,12 +174,25 @@ public class contact extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
-        // TODO add your handling code here:
+        addData();
     }//GEN-LAST:event_btnSimpanActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-        // TODO add your handling code here:
+        Home h = new Home();
+        this.setVisible(false);
     }//GEN-LAST:event_btnBackActionPerformed
+
+    private void tfIDMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tfIDMouseExited
+        try {
+            isValid = true;
+            Karyawan pilihan = daoKaryawan.getKaryawanById(Integer.parseInt(tfID.getText())).get(0);
+            tfNama.setText(pilihan.getNamaDepan() + " " + pilihan.getNamaBelakang());
+        } catch (Exception e) {
+            tfID.setText("");
+            tfNama.setText(" -- Tidak Ditemukan --");
+            isValid = false;
+        }
+    }//GEN-LAST:event_tfIDMouseExited
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -164,8 +204,8 @@ public class contact extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel33;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane16;
-    private javax.swing.JTextArea jTextArea5;
-    private javax.swing.JTextField jTextField11;
-    private javax.swing.JTextField jTextField12;
+    private javax.swing.JTextArea taKeterangan;
+    private javax.swing.JTextField tfID;
+    private javax.swing.JTextField tfNama;
     // End of variables declaration//GEN-END:variables
 }

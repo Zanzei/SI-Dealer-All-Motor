@@ -16,6 +16,7 @@ import org.hibernate.Transaction;
  * @author ANDRE
  */
 public class karyawanDAO {
+
     SessionFactory session = HibernateUtil.getSessionFactory();
 
     private Session bukaSession() {
@@ -33,7 +34,7 @@ public class karyawanDAO {
         sess.close();
         return temp;
     }
-    
+
     /**
      *
      * @param param
@@ -42,11 +43,11 @@ public class karyawanDAO {
     public List<Karyawan> getKaryawanById(int param) {
         Session sess = bukaSession();
 
-        List<Karyawan> temp = sess.createQuery("SELECT p FROM Karyawan p WHERE iDKaryawan = "+param).list();
+        List<Karyawan> temp = sess.createQuery("SELECT p FROM Karyawan p WHERE iDKaryawan = " + param).list();
         sess.close();
         return temp;
     }
-    
+
     public List<Karyawan> getKaryawanSpv() {
         Session sess = bukaSession();
 
@@ -54,7 +55,20 @@ public class karyawanDAO {
         sess.close();
         return temp;
     }
-    
+
+    public List<Karyawan> getLogin(int id, String password) {
+        try {
+            Session sess = bukaSession();
+
+            List<Karyawan> temp = sess.createQuery("FROM Karyawan WHERE id = " + id + " AND password = " + password).list();
+            //like 'CEO%'
+            sess.close();
+            return temp;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public boolean addOrUpdateKaryawan(Karyawan param) {
         try {
             Session sess = bukaSession();
@@ -68,7 +82,7 @@ public class karyawanDAO {
             return false;
         }
     }
-    
+
     public boolean deleteKaryawan(Karyawan param) {
         try {
             Session sess = bukaSession();
