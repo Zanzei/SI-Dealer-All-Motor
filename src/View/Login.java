@@ -5,7 +5,10 @@
  */
 package View;
 
+import Controller.karyawanDAO;
+import Model.Karyawan;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -16,12 +19,11 @@ public class Login extends javax.swing.JFrame {
     /**
      * Creates new form Login
      */
-    Home home;
+    private karyawanDAO daoKaryawan;
 
     public Login() {
         initComponents();
-        home = new Home();
-
+        daoKaryawan = new karyawanDAO();
     }
 
     /**
@@ -160,14 +162,30 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_tfPassActionPerformed
 
     //Untuk mengecek login
-    private void cekLogin(){
-        
+    private boolean cekLogin() {
+        try {
+            char[] pw = tfPass.getPassword();
+            if (daoKaryawan.getLogin(Integer.parseInt(tfUser.getText()), String.valueOf(pw)).get(0) == null) {
+                return false;
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
-    
+
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        cekLogin();
-        dispose();
-        home.setVisible(true);
+        if (cekLogin()) {
+            JOptionPane.showMessageDialog(this, "Logging in..");
+            dispose();
+            Home h = new Home();
+            h.setVisible(true);
+            h.setLabelText("Welcome, "+daoKaryawan.getKaryawanById(Integer.parseInt(tfUser.getText())).get(0).getNamaDepan() + " "
+                    + daoKaryawan.getKaryawanById(Integer.parseInt(tfUser.getText())).get(0).getNamaBelakang());
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Data Login Salah!");
+        }
     }//GEN-LAST:event_btnLoginActionPerformed
 
     /**

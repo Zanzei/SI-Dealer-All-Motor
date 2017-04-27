@@ -29,7 +29,7 @@ public class feedbackDAO {
     public List<Feedback> getAllFeedbacks() {
         Session sess = bukaSession();
 
-        List<Feedback> temp = sess.createQuery("SELECT p FROM feedback p").list();
+        List<Feedback> temp = sess.createQuery("SELECT p FROM Feedback p").list();
         sess.close();
         return temp;
     }
@@ -42,7 +42,7 @@ public class feedbackDAO {
     public List<Feedback> getFeedbacklById(int param) {
         Session sess = bukaSession();
 
-        List<Feedback> temp = sess.createQuery("SELECT p FROM detailretur p WHERE IDRetur = "+param).list();
+        List<Feedback> temp = sess.createQuery("SELECT p FROM Detailretur p WHERE iDRetur = "+param).list();
         sess.close();
         return temp;
     }

@@ -5,12 +5,17 @@
  */
 package View;
 
+import Controller.karyawanDAO;
+import Controller.feedbackDAO;
+import Model.Feedback;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -41,9 +46,19 @@ public class Home extends javax.swing.JFrame {
     tambahPenjualan tPenj;
     tambahRetur tRet;
 
+    private DefaultTableModel dtmDetail;
+    private feedbackDAO daoFeedback;
+
+    private List<Feedback> listFeedback;
+
     public Home() {
         initComponents();
         Home.setVisible(true);
+        panelDetail2.setVisible(false);
+
+        daoFeedback = new feedbackDAO();
+        listFeedback = daoFeedback.getAllFeedbacks();
+        dtmDetail = (DefaultTableModel) tableDetail.getModel();
     }
 
     /**
@@ -67,12 +82,16 @@ public class Home extends javax.swing.JFrame {
         btnKaryawan = new javax.swing.JButton();
         btnCustomer = new javax.swing.JButton();
         btnSupplier = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        labelWelcome = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jPanel15 = new javax.swing.JPanel();
         btnTambahRet = new javax.swing.JButton();
         btnTambahPenj = new javax.swing.JButton();
         btnTambahPemb = new javax.swing.JButton();
+        panelDetail2 = new javax.swing.JPanel();
+        labelPenjelasan2 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tableDetail = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         btnLogout = new javax.swing.JMenuItem();
@@ -267,9 +286,9 @@ public class Home extends javax.swing.JFrame {
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(240, 240, 240));
-        jLabel1.setText("Welcome, Andre !");
+        labelWelcome.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        labelWelcome.setForeground(new java.awt.Color(240, 240, 240));
+        labelWelcome.setText("Welcome, Andre !");
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/logo.png"))); // NOI18N
 
@@ -334,7 +353,7 @@ public class Home extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, HomeLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(55, 55, 55)
+                .addGap(40, 40, 40)
                 .addGroup(HomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(HomeLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
@@ -349,7 +368,7 @@ public class Home extends javax.swing.JFrame {
                             .addComponent(jLabel2)
                             .addGap(150, 150, 150))
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, HomeLayout.createSequentialGroup()
-                            .addComponent(jLabel1)
+                            .addComponent(labelWelcome)
                             .addGap(41, 41, 41)))))
         );
         HomeLayout.setVerticalGroup(
@@ -365,11 +384,54 @@ public class Home extends javax.swing.JFrame {
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 109, Short.MAX_VALUE)
-                .addComponent(jLabel1)
+                .addComponent(labelWelcome)
                 .addContainerGap())
         );
 
         getContentPane().add(Home, "card2");
+
+        panelDetail2.setBackground(new java.awt.Color(0, 51, 51));
+        panelDetail2.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                panelDetail2FocusGained(evt);
+            }
+        });
+        panelDetail2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        labelPenjelasan2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        labelPenjelasan2.setForeground(new java.awt.Color(240, 240, 240));
+        labelPenjelasan2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        labelPenjelasan2.setText("Data Feedback");
+        panelDetail2.add(labelPenjelasan2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 990, 20));
+
+        tableDetail.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID Feedback", "ID Karyawan", "Nama Karyawan", "Isi Feedback"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tableDetail);
+
+        panelDetail2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 67, 890, 380));
+
+        getContentPane().add(panelDetail2, "card3");
 
         jMenuBar1.setBackground(new java.awt.Color(255, 0, 51));
         jMenuBar1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -559,7 +621,9 @@ public class Home extends javax.swing.JFrame {
 
 
     private void repPenjualanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repPenjualanActionPerformed
-        // TODO add your handling code here:
+        Date d = new Date();
+        String file = "I:\\PBOL\\Tugas Besar\\TugasBesarOOPL-Buat Netha\\hasil report\\" + "PenjualanData" + ".pdf";
+        compileProcessReport("I:\\PBOL\\Tugas Besar\\TugasBesarOOPL-Buat Netha\\report\\Data Penjualan.jrxml", file);
     }//GEN-LAST:event_repPenjualanActionPerformed
 
     private void btnStokActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStokActionPerformed
@@ -644,7 +708,16 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_btnReturActionPerformed
 
     private void btnFeedbackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFeedbackActionPerformed
-        // TODO add your handling code here:
+        panelDetail2.setVisible(true);
+        for (Feedback f : listFeedback) {
+            dtmDetail.addRow(new Object[]{
+                f.getIDFeedback(),
+                f.getIDKaryawan(),
+                f.getIDKaryawan().getNamaDepan() + " " + f.getIDKaryawan().getNamaBelakang(),
+                f.getKeterangan()
+            });
+        }
+        JOptionPane.showMessageDialog(this, panelDetail2, null, JOptionPane.OK_OPTION);
     }//GEN-LAST:event_btnFeedbackActionPerformed
 
     /*
@@ -693,17 +766,20 @@ public class Home extends javax.swing.JFrame {
     }
     private void repSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repSupplierActionPerformed
         Date d = new Date();
-        String file = "C:\\report\\" + "SupplierData" + d
-                + ".pdf";
-        compileProcessReport("I:\\PBOL\\Tugas Besar\\TugasBesarOOPL\\report\\Data Supplier.jrxml", file);
+        String file = "I:\\PBOL\\Tugas Besar\\TugasBesarOOPL-Buat Netha\\hasil report\\" + "SupplierData" + ".pdf";
+        compileProcessReport("I:\\PBOL\\Tugas Besar\\TugasBesarOOPL-Buat Netha\\report\\Data Supplier.jrxml", file);
     }//GEN-LAST:event_repSupplierActionPerformed
 
     private void repCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repCustomerActionPerformed
-        // TODO add your handling code here:
+        Date d = new Date();
+        String file = "I:\\PBOL\\Tugas Besar\\TugasBesarOOPL-Buat Netha\\hasil report\\" + "CustomerData" + d.toString() + ".pdf";
+        compileProcessReport("I:\\PBOL\\Tugas Besar\\TugasBesarOOPL-Buat Netha\\report\\Data Customer.jrxml", file);
     }//GEN-LAST:event_repCustomerActionPerformed
 
     private void repKaryawanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repKaryawanActionPerformed
-        // TODO add your handling code here:
+        Date d = new Date();
+        String file = "I:\\PBOL\\Tugas Besar\\TugasBesarOOPL-Buat Netha\\hasil report\\" + "KaryawanData" + ".pdf";
+        compileProcessReport("I:\\PBOL\\Tugas Besar\\TugasBesarOOPL-Buat Netha\\report\\Data Karyawan.jrxml", file);
     }//GEN-LAST:event_repKaryawanActionPerformed
 
     private void repLabaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repLabaActionPerformed
@@ -711,15 +787,21 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_repLabaActionPerformed
 
     private void repPembelianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repPembelianActionPerformed
-        // TODO add your handling code here:
+        Date d = new Date();
+        String file = "I:\\PBOL\\Tugas Besar\\TugasBesarOOPL-Buat Netha\\hasil report\\" + "PembelianData" + ".pdf";
+        compileProcessReport("I:\\PBOL\\Tugas Besar\\TugasBesarOOPL-Buat Netha\\report\\Data Pembelian.jrxml", file);
     }//GEN-LAST:event_repPembelianActionPerformed
 
     private void repReturActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repReturActionPerformed
-        // TODO add your handling code here:
+        Date d = new Date();
+        String file = "I:\\PBOL\\Tugas Besar\\TugasBesarOOPL-Buat Netha\\hasil report\\" + "ReturData" + ".pdf";
+        compileProcessReport("I:\\PBOL\\Tugas Besar\\TugasBesarOOPL-Buat Netha\\report\\Data Retur.jrxml", file);
     }//GEN-LAST:event_repReturActionPerformed
 
     private void repGajiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repGajiActionPerformed
-        // TODO add your handling code here:
+        Date d = new Date();
+        String file = "I:\\PBOL\\Tugas Besar\\TugasBesarOOPL-Buat Netha\\hasil report\\" + "GajiData" + ".pdf";
+        compileProcessReport("I:\\PBOL\\Tugas Besar\\TugasBesarOOPL-Buat Netha\\report\\Data Gaji.jrxml", file);
     }//GEN-LAST:event_repGajiActionPerformed
 
     private void repPengirimanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repPengirimanActionPerformed
@@ -727,7 +809,9 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_repPengirimanActionPerformed
 
     private void repStokActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repStokActionPerformed
-        // TODO add your handling code here:
+        Date d = new Date();
+        String file = "I:\\PBOL\\Tugas Besar\\TugasBesarOOPL-Buat Netha\\hasil report\\" + "StokData" + ".pdf";
+        compileProcessReport("I:\\PBOL\\Tugas Besar\\TugasBesarOOPL-Buat Netha\\report\\Data Stok.jrxml", file);
     }//GEN-LAST:event_repStokActionPerformed
 
     private void repBestCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repBestCustomerActionPerformed
@@ -739,7 +823,9 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_repBestProdActionPerformed
 
     private void repBestKaryawanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repBestKaryawanActionPerformed
-
+        Date d = new Date();
+        String file = "I:\\PBOL\\Tugas Besar\\TugasBesarOOPL-Buat Netha\\hasil report\\" + "BestKaryawanData" + ".pdf";
+        compileProcessReport("I:\\PBOL\\Tugas Besar\\TugasBesarOOPL-Buat Netha\\report\\Data Best Karyawan.jrxml", file);
     }//GEN-LAST:event_repBestKaryawanActionPerformed
     /*
     ---------
@@ -748,11 +834,16 @@ public class Home extends javax.swing.JFrame {
      */
 
     private void btnHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHelpActionPerformed
-        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "Untuk mulai menggunakan aplikasi, dapat memilih\n"
+                + "dari salah satu menu yang tersedia dengan cara mengkliknya.");
     }//GEN-LAST:event_btnHelpActionPerformed
 
     private void btnAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAboutActionPerformed
-        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "Aplikasi ini dibuat untuk memenuhi tugas besar mata kuliah\n"
+                + "Pemrograman Berbasis Objek Lanjut\n"
+                + "dengan kelompok SI Dealer All Motor, dan anggota nya :\n"
+                + "Gianetha Sugianto - 1573016\n"
+                + "Andre Christian - 1573018");
     }//GEN-LAST:event_btnAboutActionPerformed
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
@@ -775,6 +866,12 @@ public class Home extends javax.swing.JFrame {
         tPenj.setVisible(true);
     }//GEN-LAST:event_btnTambahPenjActionPerformed
 
+    private void panelDetail2FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_panelDetail2FocusGained
+        // TODO add your handling code here:
+    }//GEN-LAST:event_panelDetail2FocusGained
+    void setLabelText(String text) {
+        labelWelcome.setText(text);
+    }
     /**
      * @param args the command line arguments
      */
@@ -797,7 +894,6 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JButton btnTambahPemb;
     private javax.swing.JButton btnTambahPenj;
     private javax.swing.JButton btnTambahRet;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
@@ -812,6 +908,16 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel labelPenjelasan;
+    private javax.swing.JLabel labelPenjelasan1;
+    private javax.swing.JLabel labelPenjelasan2;
+    private javax.swing.JLabel labelWelcome;
+    private com.toedter.calendar.JDateChooser lunasChooser;
+    private com.toedter.calendar.JDateChooser lunasChooser1;
+    private javax.swing.JPanel panelDetail;
+    private javax.swing.JPanel panelDetail1;
+    private javax.swing.JPanel panelDetail2;
     private javax.swing.JMenuItem repBestCustomer;
     private javax.swing.JMenuItem repBestKaryawan;
     private javax.swing.JMenuItem repBestProd;
@@ -825,5 +931,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JMenuItem repRetur;
     private javax.swing.JMenuItem repStok;
     private javax.swing.JMenuItem repSupplier;
+    private javax.swing.JTable tableDetail;
     // End of variables declaration//GEN-END:variables
+
 }
